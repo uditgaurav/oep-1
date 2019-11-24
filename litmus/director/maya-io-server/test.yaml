@@ -36,6 +36,10 @@
         - set_fact:
             url : "http://{{ node_ip.stdout }}:30380"
 
+        - name: sleep for 60 seconds for the maya-server ip to be accessible
+          wait_for:
+            timeout: 60
+
         - name : Check connection
           uri:
             url: "{{ url }}/ping"

@@ -37,6 +37,10 @@
         - set_fact:
             director_url : "http://{{ node_ip.stdout }}:30380"
 
+        - name: sleep for 60 seconds for the maya-ui ip to be accessible
+          wait_for:
+            timeout: 60
+
         - name : Signup
           uri:
             url: "{{ director_url }}/v3/localAuthConfig"
