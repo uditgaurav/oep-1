@@ -40,15 +40,19 @@ spec:
               configMapKeyRef:
                 name: clusterid
                 key: cluster_id
+        - set_fact:
+            flag: "Pass"
 
-          ## Takes group_id from configmap groupid
-          - name: GROUP_ID
-            valueFrom:
-              configMapKeyRef:
-                name: groupid
-                key: group_id
+      rescue:
+        - name: Setting fail flag
+          set_fact:
+            flag: "Fail"
 
-          ## It should be 1ot1 Mandatory
+      always:
+        ## RECORD END-OF-TEST IN LITMUS RESULT CR
+        - include_tasks: /ansible-utils/update_litmus_result_resource.yml
+          vars:
+            status: 'EOT'
           - name: TEMPLATE_ID
             value: '1ot1'
 
